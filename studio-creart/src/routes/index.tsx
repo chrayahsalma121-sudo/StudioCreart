@@ -314,8 +314,9 @@ function Feedback() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
   const stars = [1, 2, 3, 4, 5];
+  const [busy, setBusy] = useState(false);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!name.trim() || !review.trim()) {
       setError("Veuillez remplir votre nom et votre avis.");
@@ -323,7 +324,24 @@ function Feedback() {
     }
 
     setError("");
-    setSubmitted(true);
+    setBusy(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name, review, rating }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setSubmitted(true);
+      } else {
+        setError(data.error || "Erreur lors de l'envoi. Réessayez.");
+      }
+    } catch (err: any) {
+      setError(String(err) || "Erreur réseau");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -391,9 +409,10 @@ function Feedback() {
 
               <button
                 type="submit"
-                className="inline-flex w-full items-center justify-center rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90"
+                disabled={busy}
+                className="inline-flex w-full items-center justify-center rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90 disabled:opacity-60"
               >
-                Envoyer mon avis
+                {busy ? "Envoi..." : "Envoyer mon avis"}
               </button>
             </form>
           </div>
@@ -434,29 +453,109 @@ function Feedback() {
 }
 
 function Reserve() {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [age, setAge] = useState("");
+  const [notes, setNotes] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleReserve(e: React.FormEvent) {
+    e.preventDefault();
+    if (!firstName.trim() || !lastName.trim() || !phone.trim()) {
+      setError("Veuillez renseigner le nom, prénom et téléphone.");
+      return;
+    }
+    setError("");
+    setBusy(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ firstName, lastName, phone, email, age, notes }),
+      });
+      const data = await res.json();
+      if (res.ok && data.ok) {
+        setSubmitted(true);
+        setFirstName("");
+        setLastName("");
+        setPhone("");
+        setEmail("");
+        setAge("");
+        setNotes("");
+      } else {
+        setError(data.error || "Erreur lors de l'envoi. Réessayez.");
+      }
+    } catch (err: any) {
+      setError(String(err) || "Erreur réseau");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <section id="contact" className="py-28 px-6 bg-primary text-primary-foreground relative overflow-hidden">
       <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-secondary/20 blur-3xl" />
       <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-cream/10 blur-3xl" />
       <div className="relative max-w-4xl mx-auto text-center">
-        <p className="font-script text-3xl text-cream/90">Rejoignez-nous bientôt !</p>
-        <h2 className="mt-2 text-5xl md:text-7xl font-black leading-tight">Réservez votre<br/>place à l'atelier.</h2>
-        <p className="mt-8 text-lg text-primary-foreground/80 max-w-xl mx-auto">
-          Un appel suffit. Ihssan vous répond et vous propose la prochaine séance disponible.
-        </p>
-        <a
-          href={`tel:${PHONE}`}
-          className="mt-10 inline-flex items-center gap-3 rounded-full bg-cream text-primary px-10 py-5 text-lg font-medium shadow-2xl hover:scale-105 transition-all"
-        >
-          <span className="text-2xl">📞</span>
-          {PHONE_DISPLAY}
-        </a>
-        <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-primary-foreground/70">
-          <a href={`mailto:${EMAIL}`} className="hover:text-cream transition-colors">{EMAIL}</a>
-          <span>•</span>
-          <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">Itinéraire Google Maps</a>
-          <span>•</span>
-          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">Instagram</a>
+        <p className="font-script text-3xl text-cream/90">Réservez</p>
+        <h2 className="mt-2 text-5xl md:text-7xl font-black leading-tight">Formulaire de réservation</h2>
+        <p className="mt-8 text-lg text-primary-foreground/80 max-w-xl mx-auto">Remplissez le formulaire ci-dessous et nous vous contacterons pour confirmer la séance.</p>
+
+        <div className="mt-10">
+          <form onSubmit={handleReserve} className="mx-auto max-w-3xl space-y-6 text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium">Prénom</label>
+                <input value={firstName} onChange={(e) => setFirstName(e.target.value)} className="mt-2 w-full rounded-3xl border border-border px-4 py-3" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Nom</label>
+                <input value={lastName} onChange={(e) => setLastName(e.target.value)} className="mt-2 w-full rounded-3xl border border-border px-4 py-3" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium">Téléphone</label>
+                <input value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-2 w-full rounded-3xl border border-border px-4 py-3" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Email</label>
+                <input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 w-full rounded-3xl border border-border px-4 py-3" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium">Âge</label>
+                <input value={age} onChange={(e) => setAge(e.target.value)} className="mt-2 w-full rounded-3xl border border-border px-4 py-3" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Note / Remarques</label>
+                <input value={notes} onChange={(e) => setNotes(e.target.value)} className="mt-2 w-full rounded-3xl border border-border px-4 py-3" />
+              </div>
+            </div>
+
+            {error ? <p className="text-sm text-destructive">{error}</p> : null}
+
+            <div className="flex gap-4">
+              <button disabled={busy} type="submit" className="inline-flex items-center gap-2 rounded-full bg-cream px-6 py-3 text-primary font-semibold hover:opacity-90 disabled:opacity-60">
+                {busy ? "Envoi..." : "Réserver"}
+              </button>
+              <a href={`tel:${PHONE}`} className="inline-flex items-center gap-2 rounded-full border border-cream px-6 py-3 text-cream">Appeler</a>
+            </div>
+          </form>
+
+          {submitted ? (
+            <div className="mt-8 rounded-2xl bg-cream/5 p-6 text-center">
+              <p className="font-semibold text-foreground">Merci — votre demande a été envoyée.</p>
+              <p className="text-sm text-foreground/70">Nous vous contacterons sous peu pour confirmer.</p>
+            </div>
+          ) : null}
         </div>
       </div>
     </section>
