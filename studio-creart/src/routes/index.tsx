@@ -88,6 +88,7 @@ function Index() {
       <Mission />
       <Workshops />
       <Gallery />
+      <Feedback />
       <Reserve />
       <Footer />
     </div>
@@ -297,6 +298,48 @@ function Gallery() {
           {imgs.map((src, i) => (
             <div key={i} className={`overflow-hidden rounded-xl ${i % 5 === 0 ? "row-span-2 aspect-[3/4]" : "aspect-square"}`}>
               <img src={src} alt={`Création ${i+1}`} loading="lazy" width={800} height={800} className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Feedback() {
+  const testimonials = [
+    {
+      quote: "J'ai adoré l'ambiance et la créativité du studio. Ihssan est très patient et inspirant.",
+      name: "Sara",
+      role: "Élève créative",
+    },
+    {
+      quote: "Mes enfants ont passé un moment magique. Ils sont repartis fiers de leurs œuvres !",
+      name: "Youssef",
+      role: "Parent satisfait",
+    },
+    {
+      quote: "Un lieu chaleureux où on ose expérimenter. Les ateliers sont très bien organisés.",
+      name: "Leila",
+      role: "Artiste en herbe",
+    },
+  ];
+
+  return (
+    <section id="feedback" className="py-28 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <p className="font-script text-3xl text-secondary">Témoignages</p>
+          <h2 className="mt-2 text-5xl md:text-6xl font-black text-primary">Ce que disent nos participants.</h2>
+        </div>
+        <div className="grid gap-6 md:grid-cols-3">
+          {testimonials.map((item) => (
+            <div key={item.name} className="rounded-3xl border border-border bg-background/70 p-8 shadow-xl shadow-primary/5">
+              <p className="text-lg leading-relaxed text-foreground/75">“{item.quote}”</p>
+              <div className="mt-8">
+                <p className="font-serif text-xl font-bold text-primary">{item.name}</p>
+                <p className="text-sm uppercase tracking-[0.3em] text-secondary/80">{item.role}</p>
+              </div>
             </div>
           ))}
         </div>
