@@ -7,7 +7,6 @@ import wCanvas from "@/assets/workshop-canvas.jpg";
 import wKids from "@/assets/workshop-kids.jpg";
 import wTherapy from "@/assets/workshop-therapy.jpg";
 import wDrawing from "@/assets/workshop-drawing.jpg";
-import logo from "@/assets/logo.svg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -128,12 +127,6 @@ function Hero() {
         <img src={heroStudio} alt="Atelier Studio Creart" width={1920} height={1080} className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-background/40" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-      </div>
-      <div className="absolute right-8 top-28 hidden xl:block">
-        <div className="relative w-72 h-72 rounded-full bg-cream/95 border-8 border-secondary/30 shadow-[0_30px_80px_rgba(15,23,42,0.25)] overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(239,68,68,0.18),_transparent_45%)]" />
-          <img src={logo} alt="Studio Creart logo" className="absolute inset-0 m-auto w-40 h-40 p-6" />
-        </div>
       </div>
       <div className="relative max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-12 items-center w-full">
         <div className="animate-fade-up">
