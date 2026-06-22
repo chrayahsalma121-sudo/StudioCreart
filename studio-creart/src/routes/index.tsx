@@ -7,13 +7,14 @@ import wCanvas from "@/assets/workshop-canvas.jpg";
 import wKids from "@/assets/workshop-kids.jpg";
 import wTherapy from "@/assets/workshop-therapy.jpg";
 import wDrawing from "@/assets/workshop-drawing.jpg";
+import logo from "@/assets/logo.svg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Studio Creart — Atelier d'Art à Tétouan" },
+      { title: "Studio Créart — Atelier d'Art à Tétouan" },
       { name: "description", content: "Atelier artistique à Tétouan dédié aux enfants et aux adultes. Cours de dessin, peinture, céramique, art-thérapie et ateliers créatifs." },
-      { property: "og:title", content: "Studio Creart — Atelier d'Art à Tétouan" },
+      { property: "og:title", content: "Studio Créart — Atelier d'Art à Tétouan" },
       { property: "og:description", content: "Un lieu d'apprentissage, d'expression et de découverte au cœur de Tétouan." },
       { property: "og:image", content: heroStudio },
     ],
@@ -24,6 +25,7 @@ export const Route = createFileRoute("/")({
 const PHONE = "+212708830154";
 const PHONE_DISPLAY = "+212 708 830 154";
 const EMAIL = "creartstudiio@gmail.com";
+const INSTAGRAM_URL = "https://www.instagram.com/studiocreart/";
 const ADDRESS = "Bureaux Chams Doha, 4e Étage, N20 — Wilaya Center, Tétouan 93000";
 const MAPS_URL = "https://www.google.com/maps/search/?api=1&query=Cr%C3%A9art+Studio+Tetouan";
 
@@ -97,9 +99,12 @@ function Nav() {
   return (
     <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-background/70 border-b border-border/60">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <a href="#top" className="flex items-baseline gap-2">
-          <span className="font-serif text-2xl font-bold text-primary tracking-tight">Studio</span>
-          <span className="font-script text-xl text-secondary -ml-1">Creart</span>
+        <a href="#top" className="flex items-center gap-3">
+          <img src={logo} alt="Studio Creart logo" width={40} height={40} className="h-10 w-10 rounded-full bg-slate-950/90 p-1" />
+          <div className="flex items-baseline gap-2">
+            <span className="font-serif text-2xl font-bold text-primary tracking-tight">Studio</span>
+            <span className="font-script text-xl text-secondary -ml-1">Creart</span>
+          </div>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-foreground/80">
           <a href="#about" className="hover:text-primary transition-colors">À propos</a>
@@ -326,6 +331,8 @@ function Reserve() {
           <a href={`mailto:${EMAIL}`} className="hover:text-cream transition-colors">{EMAIL}</a>
           <span>•</span>
           <a href={MAPS_URL} target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">Itinéraire Google Maps</a>
+          <span>•</span>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="hover:text-cream transition-colors">Instagram</a>
         </div>
       </div>
     </section>
@@ -369,6 +376,7 @@ function Footer() {
           <h4 className="font-serif text-lg text-cream mt-6 mb-2">Contact</h4>
           <a href={`tel:${PHONE}`} className="block text-sm text-primary hover:text-cream transition-colors">{PHONE_DISPLAY}</a>
           <a href={`mailto:${EMAIL}`} className="block text-sm text-cream/70 hover:text-cream transition-colors mt-1">{EMAIL}</a>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" className="block text-sm text-cream/70 hover:text-cream transition-colors mt-1">@studiocreart</a>
         </div>
       </div>
       <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-cream/10 flex flex-wrap justify-between gap-4 text-xs text-cream/50">
