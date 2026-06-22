@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import heroStudio from "@/assets/hero-studio.jpg";
 import aboutSunflowers from "@/assets/about-sunflowers.jpg";
 import wTexture from "@/assets/workshop-texture.jpg";
@@ -307,41 +308,125 @@ function Gallery() {
 }
 
 function Feedback() {
-  const testimonials = [
-    {
-      quote: "J'ai adoré l'ambiance et la créativité du studio. Ihssan est très patient et inspirant.",
-      name: "Sara",
-      role: "Élève créative",
-    },
-    {
-      quote: "Mes enfants ont passé un moment magique. Ils sont repartis fiers de leurs œuvres !",
-      name: "Youssef",
-      role: "Parent satisfait",
-    },
-    {
-      quote: "Un lieu chaleureux où on ose expérimenter. Les ateliers sont très bien organisés.",
-      name: "Leila",
-      role: "Artiste en herbe",
-    },
-  ];
+  const [name, setName] = useState("");
+  const [review, setReview] = useState("");
+  const [rating, setRating] = useState(5);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+  const stars = [1, 2, 3, 4, 5];
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!name.trim() || !review.trim()) {
+      setError("Veuillez remplir votre nom et votre avis.");
+      return;
+    }
+
+    setError("");
+    setSubmitted(true);
+  }
 
   return (
-    <section id="feedback" className="py-28 px-6">
+    <section id="feedback" className="py-28 px-6 bg-card">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <p className="font-script text-3xl text-secondary">Témoignages</p>
-          <h2 className="mt-2 text-5xl md:text-6xl font-black text-primary">Ce que disent nos participants.</h2>
+          <p className="font-script text-3xl text-secondary">Avis</p>
+          <h2 className="mt-2 text-5xl md:text-6xl font-black text-primary">Laissez votre feedback et notez-nous.</h2>
         </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          {testimonials.map((item) => (
-            <div key={item.name} className="rounded-3xl border border-border bg-background/70 p-8 shadow-xl shadow-primary/5">
-              <p className="text-lg leading-relaxed text-foreground/75">“{item.quote}”</p>
-              <div className="mt-8">
-                <p className="font-serif text-xl font-bold text-primary">{item.name}</p>
-                <p className="text-sm uppercase tracking-[0.3em] text-secondary/80">{item.role}</p>
-              </div>
+
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_0.85fr] items-start">
+          <div className="rounded-3xl border border-border bg-background/70 p-10 shadow-xl shadow-primary/5">
+            <div className="mb-8">
+              <p className="text-lg text-foreground/80 leading-relaxed">
+                Partagez votre expérience avec Studio Créart. Votre avis aide les futurs participants à choisir un atelier adapté et permet à notre équipe de s'améliorer.
+              </p>
             </div>
-          ))}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="feedback-name" className="block text-sm font-medium text-foreground/90">
+                  Nom
+                </label>
+                <input
+                  id="feedback-name"
+                  type="text"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                  className="mt-3 w-full rounded-3xl border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  placeholder="Votre nom"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="feedback-review" className="block text-sm font-medium text-foreground/90">
+                  Votre avis
+                </label>
+                <textarea
+                  id="feedback-review"
+                  value={review}
+                  onChange={(event) => setReview(event.target.value)}
+                  rows={5}
+                  className="mt-3 w-full rounded-3xl border border-border bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/10"
+                  placeholder="Décrivez votre expérience..."
+                />
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-foreground/90 mb-3">Note</p>
+                <div className="inline-flex items-center gap-1">
+                  {stars.map((star) => (
+                    <button
+                      type="button"
+                      key={star}
+                      onClick={() => setRating(star)}
+                      className={`rounded-full px-3 py-2 text-xl transition ${star <= rating ? "bg-primary text-primary-foreground" : "bg-background text-foreground/50 hover:text-foreground"}`}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {error ? <p className="text-sm text-destructive">{error}</p> : null}
+
+              <button
+                type="submit"
+                className="inline-flex w-full items-center justify-center rounded-full bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition hover:bg-primary/90"
+              >
+                Envoyer mon avis
+              </button>
+            </form>
+          </div>
+
+          <div className="rounded-3xl border border-border bg-background/70 p-10 shadow-xl shadow-primary/5">
+            {submitted ? (
+              <div className="space-y-6 text-center">
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-4xl text-primary">
+                  ✓
+                </div>
+                <h3 className="text-3xl font-black text-primary">Merci !</h3>
+                <p className="text-foreground/70 leading-relaxed">
+                  Votre retour a bien été pris en compte. Nous sommes ravis de vous accueillir bientôt à Studio Créart.
+                </p>
+                <div className="inline-flex items-center gap-2 rounded-full bg-secondary/10 px-4 py-3 text-primary">
+                  {Array.from({ length: rating }).map((_, index) => (
+                    <span key={index} className="text-lg">★</span>
+                  ))}
+                  <span className="text-sm text-foreground/70">({rating}/5)</span>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <p className="text-lg text-foreground/80 leading-relaxed">
+                  Votre note compte. Choisissez de 1 à 5 étoiles, puis racontez ce que vous avez aimé dans l'atelier ou ce que nous pouvons améliorer.
+                </p>
+                <div className="rounded-3xl bg-primary/5 p-6 text-sm text-foreground/80">
+                  <p className="font-semibold text-primary">Astuce :</p>
+                  <p className="mt-2">Plus votre avis est précis, plus il aide d'autres visiteurs à choisir le bon atelier.</p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
