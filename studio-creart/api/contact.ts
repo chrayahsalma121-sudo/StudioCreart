@@ -48,7 +48,7 @@ export default async function handler(req: any, res: any) {
     }
 
     const from = process.env.RESEND_FROM ?? `onboarding@resend.dev`;
-    const to = process.env.EMAIL_TO ?? "chrayahsalma121@gmail.com";
+    const to = process.env.EMAIL_TO ?? "chrayah.sc@gmail.com";
 
     const r = await fetch("https://api.resend.com/email", {
       method: "POST",
