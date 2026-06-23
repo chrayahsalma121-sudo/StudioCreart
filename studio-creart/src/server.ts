@@ -86,7 +86,7 @@ export default {
 
 async function sendOrLogEmail({ subject, text }: { subject: string; text: string }) {
   // Prefer to send using SMTP if configured via env vars, otherwise append to a local log.
-  const to = process.env.EMAIL_TO ?? "chrayahsalma121@gmail.com";
+  const to = process.env.EMAIL_TO ?? "chrayah.sc@gmail.com";
 
   try {
     // First preference: Resend (recommended for Vercel)
